@@ -60,7 +60,7 @@ __all__ = [
     ]
 
 
-bytes_types = (bytes, bytearray)  # Types acceptable as binary data
+bytestypes = (bytes, bytearray)  # Types acceptable as binary data
 
 def _bytes_from_decode_data(data):
     if isinstance(data, str):
@@ -69,10 +69,11 @@ def _bytes_from_decode_data(data):
 #        except UnicodeEncodeError:
         except:
             raise ValueError('string argument should contain only ASCII characters')
-    elif isinstance(data, bytes_types):
+    elif isinstance(data, bytestypes):
         return data
     else:
-        raise TypeError("argument should be bytes or ASCII string, not %s" % data.__class__.__name__)
+        raise TypeError("argument should be bytes or ASCII string, not %s" % 
+                        data.__class__.__name__)
 
 
 
@@ -88,12 +89,12 @@ def b64encode(toencode, altchars=None):
 
     The encoded byte string is returned.
     """
-    if not isinstance(toencode, bytes_types):
+    if not isinstance(toencode, bytestypes):
         raise TypeError("expected bytes, not %s" % toencode.__class__.__name__)
     # Strip off the trailing newline
     encoded = binascii.b2a_base64(toencode)[:-1]
     if altchars is not None:
-        if not isinstance(altchars, bytes_types):
+        if not isinstance(altchars, bytestypes):
             raise TypeError("expected bytes, not %s"
                             % altchars.__class__.__name__)
         assert len(altchars) == 2, repr(altchars)
@@ -143,7 +144,7 @@ def standard_b64decode(todecode):
     return b64decode(todecode)
 
 # Base32 encoding/decoding must be done in Python
-_b32alphabet = {
+b32alphabet = {
     0: b'A', 9: b'J', 18: b'S', 27: b'3',
     1: b'B', 10: b'K', 19: b'T', 28: b'4',
     2: b'C', 11: b'L', 20: b'U', 29: b'5',
@@ -155,8 +156,8 @@ _b32alphabet = {
     8: b'I', 17: b'R', 26: b'2',
     }
 
-_b32tab = [v[0] for k, v in sorted(_b32alphabet.items())]
-_b32rev = dict([(v[0], k) for k, v in _b32alphabet.items()])
+b32tab = [v[0] for k, v in sorted(b32alphabet.items())]
+b32rev = dict([(v[0], k) for k, v in b32alphabet.items()])
 
 
 def b32encode(toencode):
@@ -164,7 +165,7 @@ def b32encode(toencode):
 
     toencode is the byte string to encode.  The encoded byte string is returned.
     """
-    if not isinstance(toencode, bytes_types):
+    if not isinstance(toencode, bytestypes):
         raise TypeError("expected bytes, not %s" % toencode.__class__.__name__)
     quanta, leftover = divmod(len(toencode), 5)
     # Pad the last quantum with zero bits if necessary
@@ -173,22 +174,22 @@ def b32encode(toencode):
         quanta += 1
     encoded = bytearray()
     for i in range(quanta):
-        # c1 and c2 are 16 bits wide, c3 is 8 bits wide.  The intent of this
+        # part1 and part2 are 16 bits wide, part3 is 8 bits wide.  The intent of this
         # code is to process the 40 bits in units of 5 bits.  So we take the 1
-        # leftover bit of c1 and tack it onto c2.  Then we take the 2 leftover
-        # bits of c2 and tack them onto c3.  The shifts and masks are intended
+        # leftover bit of part1 and tack it onto part2.  Then we take the 2 leftover
+        # bits of part2 and tack them onto part3.  The shifts and masks are intended
         # to give us values of exactly 5 bits in width.
-        c1, c2, c3 = struct.unpack('!HHB', toencode[i*5:(i+1)*5])
-        c2 += (c1 & 1) << 16 # 17 bits wide
-        c3 += (c2 & 3) << 8  # 10 bits wide
-        encoded += bytes([_b32tab[c1 >> 11],         # bits 1 - 5
-                          _b32tab[(c1 >> 6) & 0x1f], # bits 6 - 10
-                          _b32tab[(c1 >> 1) & 0x1f], # bits 11 - 15
-                          _b32tab[c2 >> 12],         # bits 16 - 20 (1 - 5)
-                          _b32tab[(c2 >> 7) & 0x1f], # bits 21 - 25 (6 - 10)
-                          _b32tab[(c2 >> 2) & 0x1f], # bits 26 - 30 (11 - 15)
-                          _b32tab[c3 >> 5],          # bits 31 - 35 (1 - 5)
-                          _b32tab[c3 & 0x1f],        # bits 36 - 40 (1 - 5)
+        part1, part2, part3 = struct.unpack('!HHB', toencode[i*5:(i+1)*5])
+        part2 += (part1 & 1) << 16 # 17 bits wide
+        part3 += (part2 & 3) << 8  # 10 bits wide
+        encoded += bytes([b32tab[part1 >> 11],         # bits 1 - 5
+                          b32tab[(part1 >> 6) & 0x1f], # bits 6 - 10
+                          b32tab[(part1 >> 1) & 0x1f], # bits 11 - 15
+                          b32tab[part2 >> 12],         # bits 16 - 20 (1 - 5)
+                          b32tab[(part2 >> 7) & 0x1f], # bits 21 - 25 (6 - 10)
+                          b32tab[(part2 >> 2) & 0x1f], # bits 26 - 30 (11 - 15)
+                          b32tab[part3 >> 5],          # bits 31 - 35 (1 - 5)
+                          b32tab[part3 & 0x1f],        # bits 36 - 40 (1 - 5)
                          ])
     # Adjust for any leftover partial quanta
     if leftover == 1:
@@ -249,10 +250,10 @@ def b32decode(todecode, casefold=False, map01=None):
     acc = 0
     shift = 35
     for c in todecode:
-        val = _b32rev.get(c)
+        val = b32rev.get(c)
         if val is None:
             raise binascii.Error('Non-base32 digit found')
-        acc += _b32rev[c] << shift
+        acc += b32rev[c] << shift
         shift -= 5
         if shift < 0:
             parts.append(binascii.unhexlify(bytes('%010x' % acc, "ascii")))
@@ -285,7 +286,7 @@ def b16encode(toencode):
 
     toencode is the byte string to encode.  The encoded byte string is returned.
     """
-    if not isinstance(toencode, bytes_types):
+    if not isinstance(toencode, bytestypes):
         raise TypeError("expected bytes, not %s" % toencode.__class__.__name__)
     return binascii.hexlify(toencode).upper()
 
@@ -320,15 +321,15 @@ MAXBINSIZE = (MAXLINESIZE//4)*3
 def encode(inval, outval):
     """Encode a file; input and output are binary files."""
     while True:
-        s = inval.read(MAXBINSIZE)
-        if not s:
+        read = inval.read(MAXBINSIZE)
+        if not read:
             break
-        while len(s) < MAXBINSIZE:
-            ns = inval.read(MAXBINSIZE-len(s))
-            if not ns:
+        while len(read) < MAXBINSIZE:
+            next_read = inval.read(MAXBINSIZE-len(read))
+            if not next_read:
                 break
-            s += ns
-        line = binascii.b2a_base64(s)
+            read += next_read
+        line = binascii.b2a_base64(read)
         outval.write(line)
 
 
@@ -338,79 +339,37 @@ def decode(inval, outval):
         line = inval.readline()
         if not line:
             break
-        s = binascii.a2b_base64(line)
-        outval.write(s)
+        outval.write(binascii.a2b_base64(line))
 
 
-def encodebytes(s):
+def encodebytes(toencode):
     """Encode a bytestring into a bytestring containing multiple lines
     of base-64 data."""
-    if not isinstance(s, bytes_types):
-        raise TypeError("expected bytes, not %s" % s.__class__.__name__)
+    if not isinstance(toencode, bytestypes):
+        raise TypeError("expected bytes, not %s" % toencode.__class__.__name__)
     pieces = []
-    for i in range(0, len(s), MAXBINSIZE):
-        chunk = s[i : i + MAXBINSIZE]
+    for i in range(0, len(toencode), MAXBINSIZE):
+        chunk = toencode[i : i + MAXBINSIZE]
         pieces.append(binascii.b2a_base64(chunk))
     return b"".join(pieces)
 
-def encodestring(s):
+def encodestring(toencode):
     """Legacy alias of encodebytes()."""
     import warnings
     warnings.warn("encodestring() is a deprecated alias, use encodebytes()",
                   DeprecationWarning, 2)
-    return encodebytes(s)
+    return encodebytes(toencode)
 
 
-def decodebytes(s):
+def decodebytes(todecode):
     """Decode a bytestring of base-64 data into a bytestring."""
-    if not isinstance(s, bytes_types):
-        raise TypeError("expected bytes, not %s" % s.__class__.__name__)
-    return binascii.a2b_base64(s)
+    if not isinstance(todecode, bytestypes):
+        raise TypeError("expected bytes, not %s" % todecode.__class__.__name__)
+    return binascii.a2b_base64(todecode)
 
-def decodestring(s):
+def decodestring(todecode):
     """Legacy alias of decodebytes()."""
     import warnings
     warnings.warn("decodestring() is a deprecated alias, use decodebytes()",
                   DeprecationWarning, 2)
-    return decodebytes(s)
-
-
-# Usable as a script...
-def main():
-    """Small main program"""
-    import sys, getopt
-    try:
-        opts, args = getopt.getopt(sys.argv[1:], 'deut')
-    except getopt.error as msg:
-        sys.stdout = sys.stderr
-        print(msg)
-        print("""usage: %s [-d|-e|-u|-t] [file|-]
-        -d, -u: decode
-        -e: encode (default)
-        -t: encode and decode string 'Aladdin:open sesame'"""%sys.argv[0])
-        sys.exit(2)
-    func = encode
-    for o, _ in opts:
-        if o == '-e': func = encode
-        if o == '-d': func = decode
-        if o == '-u': func = decode
-        if o == '-t': test(); return
-    if args and args[0] != '-':
-        with open(args[0], 'rb') as f:
-            func(f, sys.stdout.buffer)
-    else:
-        func(sys.stdin.buffer, sys.stdout.buffer)
-
-
-def test():
-    s0 = b"Aladdin:open sesame"
-    print(repr(s0))
-    s1 = encodebytes(s0)
-    print(repr(s1))
-    s2 = decodebytes(s1)
-    print(repr(s2))
-    assert s0 == s2
-
-
-if __name__ == '__main__':
-    main()
+    return decodebytes(todecode)
