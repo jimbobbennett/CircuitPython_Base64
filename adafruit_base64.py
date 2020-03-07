@@ -60,7 +60,7 @@ __all__ = [
     ]
 
 
-BytesTypes = (bytes, bytearray)  # Types acceptable as binary data
+BYTES_TYPES = (bytes, bytearray)  # Types acceptable as binary data
 
 def _bytes_from_decode_data(data):
     if isinstance(data, str):
@@ -69,7 +69,7 @@ def _bytes_from_decode_data(data):
 #        except UnicodeEncodeError:
         except:
             raise ValueError('string argument should contain only ASCII characters')
-    elif isinstance(data, BytesTypes):
+    elif isinstance(data, BYTES_TYPES):
         return data
     else:
         raise TypeError("argument should be bytes or ASCII string, not %s" %
@@ -89,12 +89,12 @@ def b64encode(toencode, altchars=None):
 
     The encoded byte string is returned.
     """
-    if not isinstance(toencode, BytesTypes):
+    if not isinstance(toencode, BYTES_TYPES):
         raise TypeError("expected bytes, not %s" % toencode.__class__.__name__)
     # Strip off the trailing newline
     encoded = binascii.b2a_base64(toencode)[:-1]
     if altchars is not None:
-        if not isinstance(altchars, BytesTypes):
+        if not isinstance(altchars, BYTES_TYPES):
             raise TypeError("expected bytes, not %s"
                             % altchars.__class__.__name__)
         assert len(altchars) == 2, repr(altchars)
@@ -165,7 +165,7 @@ def b32encode(toencode):
 
     toencode is the byte string to encode.  The encoded byte string is returned.
     """
-    if not isinstance(toencode, BytesTypes):
+    if not isinstance(toencode, BYTES_TYPES):
         raise TypeError("expected bytes, not %s" % toencode.__class__.__name__)
     quanta, leftover = divmod(len(toencode), 5)
     # Pad the last quantum with zero bits if necessary
@@ -286,7 +286,7 @@ def b16encode(toencode):
 
     toencode is the byte string to encode.  The encoded byte string is returned.
     """
-    if not isinstance(toencode, BytesTypes):
+    if not isinstance(toencode, BYTES_TYPES):
         raise TypeError("expected bytes, not %s" % toencode.__class__.__name__)
     return binascii.hexlify(toencode).upper()
 
@@ -345,7 +345,7 @@ def decode(inval, outval):
 def encodebytes(toencode):
     """Encode a bytestring into a bytestring containing multiple lines
     of base-64 data."""
-    if not isinstance(toencode, BytesTypes):
+    if not isinstance(toencode, BYTES_TYPES):
         raise TypeError("expected bytes, not %s" % toencode.__class__.__name__)
     pieces = []
     for i in range(0, len(toencode), MAXBINSIZE):
@@ -363,7 +363,7 @@ def encodestring(toencode):
 
 def decodebytes(todecode):
     """Decode a bytestring of base-64 data into a bytestring."""
-    if not isinstance(todecode, BytesTypes):
+    if not isinstance(todecode, BYTES_TYPES):
         raise TypeError("expected bytes, not %s" % todecode.__class__.__name__)
     return binascii.a2b_base64(todecode)
 
