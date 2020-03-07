@@ -144,7 +144,7 @@ def standard_b64decode(todecode):
     return b64decode(todecode)
 
 # Base32 encoding/decoding must be done in Python
-B32Alphabet = {
+BASE32_ALPHABET = {
     0: b'A', 9: b'J', 18: b'S', 27: b'3',
     1: b'B', 10: b'K', 19: b'T', 28: b'4',
     2: b'C', 11: b'L', 20: b'U', 29: b'5',
@@ -156,8 +156,8 @@ B32Alphabet = {
     8: b'I', 17: b'R', 26: b'2',
     }
 
-B32Tab = [v[0] for k, v in sorted(B32Alphabet.items())]
-B32Rev = dict([(v[0], k) for k, v in B32Alphabet.items()])
+BASE32_TAB = [v[0] for k, v in sorted(BASE32_ALPHABET.items())]
+BASE32_REV = dict([(v[0], k) for k, v in BASE32_ALPHABET.items()])
 
 
 def b32encode(toencode):
@@ -182,14 +182,14 @@ def b32encode(toencode):
         part1, part2, part3 = struct.unpack('!HHB', toencode[i*5:(i+1)*5])
         part2 += (part1 & 1) << 16 # 17 bits wide
         part3 += (part2 & 3) << 8  # 10 bits wide
-        encoded += bytes([B32Tab[part1 >> 11],         # bits 1 - 5
-                          B32Tab[(part1 >> 6) & 0x1f], # bits 6 - 10
-                          B32Tab[(part1 >> 1) & 0x1f], # bits 11 - 15
-                          B32Tab[part2 >> 12],         # bits 16 - 20 (1 - 5)
-                          B32Tab[(part2 >> 7) & 0x1f], # bits 21 - 25 (6 - 10)
-                          B32Tab[(part2 >> 2) & 0x1f], # bits 26 - 30 (11 - 15)
-                          B32Tab[part3 >> 5],          # bits 31 - 35 (1 - 5)
-                          B32Tab[part3 & 0x1f],        # bits 36 - 40 (1 - 5)
+        encoded += bytes([BASE32_TAB[part1 >> 11],         # bits 1 - 5
+                          BASE32_TAB[(part1 >> 6) & 0x1f], # bits 6 - 10
+                          BASE32_TAB[(part1 >> 1) & 0x1f], # bits 11 - 15
+                          BASE32_TAB[part2 >> 12],         # bits 16 - 20 (1 - 5)
+                          BASE32_TAB[(part2 >> 7) & 0x1f], # bits 21 - 25 (6 - 10)
+                          BASE32_TAB[(part2 >> 2) & 0x1f], # bits 26 - 30 (11 - 15)
+                          BASE32_TAB[part3 >> 5],          # bits 31 - 35 (1 - 5)
+                          BASE32_TAB[part3 & 0x1f],        # bits 36 - 40 (1 - 5)
                          ])
     # Adjust for any leftover partial quanta
     if leftover == 1:
@@ -250,10 +250,10 @@ def b32decode(todecode, casefold=False, map01=None):
     acc = 0
     shift = 35
     for char in todecode:
-        val = B32Rev.get(char)
+        val = BASE32_REV.get(char)
         if val is None:
             raise binascii.Error('Non-base32 digit found')
-        acc += B32Rev[char] << shift
+        acc += BASE32_REV[char] << shift
         shift -= 5
         if shift < 0:
             parts.append(binascii.unhexlify(bytes('%010x' % acc, "ascii")))
