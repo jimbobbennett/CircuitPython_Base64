@@ -58,7 +58,17 @@ To install in a virtual environment in your current project:
 Usage Example
 =============
 
-.. todo:: Add a quick, simple example. It and other examples should live in the examples folder and be included in docs/examples.rst.
+Base64 encode a byte string.
+
+.. code-block:: python
+
+    encoded = base64.encodebytes(bytes_to_encode)
+
+Decode a base64 encoded string to bytes.
+
+.. code-block:: python
+
+    decoded = base64.decodebytes(string_to_decode)
 
 Contributing
 ============
