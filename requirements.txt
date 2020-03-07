@@ -1,2 +1,2 @@
 Adafruit-Blinka
-adafruit-binascii
+Adafruit_CircuitPython_Binascii
