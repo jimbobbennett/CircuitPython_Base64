@@ -31,20 +31,11 @@ RFC 3548: Base16, Base32, Base64 Data Encodings
 Implementation Notes
 --------------------
 
-**Hardware:**
-
-.. todo:: Add links to any specific hardware product page(s), or category page(s). Use unordered list & hyperlink rST
-   inline format: "* `Link Text <url>`_"
-
 **Software and Dependencies:**
 
 * Adafruit CircuitPython firmware for the supported boards:
   https://github.com/adafruit/circuitpython/releases
 
-.. todo:: Uncomment or remove the Bus Device and/or the Register library dependencies based on the library's use of either.
-
-# * Adafruit's Bus Device library: https://github.com/adafruit/Adafruit_CircuitPython_BusDevice
-# * Adafruit's Register library: https://github.com/adafruit/Adafruit_CircuitPython_Register
 """
 
 # imports
@@ -65,12 +56,7 @@ __all__ = [
     'b64encode', 'b64decode', 'b32encode', 'b32decode',
     'b16encode', 'b16decode',
     # Standard Base64 encoding
-    'standard_b64encode', 'standard_b64decode',
-    # Some common Base64 alternatives.  As referenced by RFC 3458, see thread
-    # starting at:
-    #
-    # http://zgp.org/pipermail/p2p-hackers/2001-September/000316.html
-    'urlsafe_b64encode', 'urlsafe_b64decode',
+    'standard_b64encode', 'standard_b64decode'
     ]
 
 
@@ -156,40 +142,9 @@ def standard_b64decode(s):
     """
     return b64decode(s)
 
-
-#_urlsafe_encode_translation = bytes.maketrans(b'+/', b'-_')
-#_urlsafe_decode_translation = bytes.maketrans(b'-_', b'+/')
-
-def urlsafe_b64encode(s):
-    """Encode a byte string using a url-safe Base64 alphabet.
-
-    s is the byte string to encode.  The encoded byte string is
-    returned.  The alphabet uses '-' instead of '+' and '_' instead of
-    '/'.
-    """
-#    return b64encode(s).translate(_urlsafe_encode_translation)
-    raise NotImplementedError()
-
-def urlsafe_b64decode(s):
-    """Decode a byte string encoded with the standard Base64 alphabet.
-
-    s is the byte string to decode.  The decoded byte string is
-    returned.  binascii.Error is raised if the input is incorrectly
-    padded or if there are non-alphabet characters present in the
-    input.
-
-    The alphabet uses '-' instead of '+' and '_' instead of '/'.
-    """
-#    s = _bytes_from_decode_data(s)
-#    s = s.translate(_urlsafe_decode_translation)
-#    return b64decode(s)
-    raise NotImplementedError()
-
-
-
 # Base32 encoding/decoding must be done in Python
 _b32alphabet = {
-    0: b'A',  9: b'J', 18: b'S', 27: b'3',
+    0: b'A', 9: b'J', 18: b'S', 27: b'3',
     1: b'B', 10: b'K', 19: b'T', 28: b'4',
     2: b'C', 11: b'L', 20: b'U', 29: b'5',
     3: b'D', 12: b'M', 21: b'V', 30: b'6',
@@ -267,7 +222,7 @@ def b32decode(s, casefold=False, map01=None):
     characters present in the input.
     """
     s = _bytes_from_decode_data(s)
-    quanta, leftover = divmod(len(s), 8)
+    _, leftover = divmod(len(s), 8)
     if leftover:
         raise binascii.Error('Incorrect padding')
     # Handle section 2.4 zero and one mapping.  The flag map01 will be either
@@ -362,29 +317,29 @@ def b16decode(s, casefold=False):
 MAXLINESIZE = 76 # Excluding the CRLF
 MAXBINSIZE = (MAXLINESIZE//4)*3
 
-def encode(input, output):
+def encode(inval, outval):
     """Encode a file; input and output are binary files."""
     while True:
-        s = input.read(MAXBINSIZE)
+        s = inval.read(MAXBINSIZE)
         if not s:
             break
         while len(s) < MAXBINSIZE:
-            ns = input.read(MAXBINSIZE-len(s))
+            ns = inval.read(MAXBINSIZE-len(s))
             if not ns:
                 break
             s += ns
         line = binascii.b2a_base64(s)
-        output.write(line)
+        outval.write(line)
 
 
-def decode(input, output):
+def decode(inval, outval):
     """Decode a file; input and output are binary files."""
     while True:
-        line = input.readline()
+        line = inval.readline()
         if not line:
             break
         s = binascii.a2b_base64(line)
-        output.write(s)
+        outval.write(s)
 
 
 def encodebytes(s):
@@ -435,7 +390,7 @@ def main():
         -t: encode and decode string 'Aladdin:open sesame'"""%sys.argv[0])
         sys.exit(2)
     func = encode
-    for o, a in opts:
+    for o, _ in opts:
         if o == '-e': func = encode
         if o == '-d': func = decode
         if o == '-u': func = decode
