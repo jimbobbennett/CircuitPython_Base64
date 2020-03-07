@@ -1,8 +1,8 @@
 import adafruit_base64 as base64
 
-s0 = b"Aladdin:open sesame"
-print(repr(s0))
-s1 = base64.encodebytes(s0)
-print(repr(s1))
-s2 = base64.decodebytes(s1)
-print(repr(s2))
+bytes_to_encode = b"Aladdin:open sesame"
+print(repr(bytes_to_encode))
+base64_string = base64.encodebytes(bytes_to_encode)
+print(repr(base64_string))
+decoded_bytes = base64.decodebytes(base64_string)
+print(repr(decoded_bytes))
