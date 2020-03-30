@@ -1,7 +1,7 @@
 Introduction
 ============
 
-.. image:: https://readthedocs.org/projects/adafruit-circuitpython-base64/badge/?version=latest
+.. image:: https://readthedocs.org/projects/circuitpython-base64/badge/?version=latest
     :target: https://circuitpython.readthedocs.io/projects/base64/en/latest/
     :alt: Documentation Status
 
@@ -9,8 +9,8 @@ Introduction
     :target: https://discord.gg/nBQh6qu
     :alt: Discord
 
-.. image:: https://github.com/adafruit/Adafruit_CircuitPython_base64/workflows/Build%20CI/badge.svg
-    :target: https://github.com/adafruit/Adafruit_CircuitPython_base64/actions
+.. image:: https://github.com/jimbobbennett/CircuitPython_base64/workflows/Build%20CI/badge.svg
+    :target: https://github.com/jimbobbennett/CircuitPython_base64/actions
     :alt: Build Status
 
 .. image:: https://img.shields.io/badge/code%20style-black-000000.svg
@@ -35,17 +35,17 @@ Installing from PyPI
 =====================
 
 On supported GNU/Linux systems like the Raspberry Pi, you can install the driver locally `from
-PyPI <https://pypi.org/project/adafruit-circuitpython-base64/>`_. To install for current user:
+PyPI <https://pypi.org/project/circuitpython-base64/>`_. To install for current user:
 
 .. code-block:: shell
 
-    pip3 install adafruit-circuitpython-base64
+    pip3 install circuitpython-base64
 
 To install system-wide (this may be required in some cases):
 
 .. code-block:: shell
 
-    sudo pip3 install adafruit-circuitpython-base64
+    sudo pip3 install circuitpython-base64
 
 To install in a virtual environment in your current project:
 
@@ -54,7 +54,7 @@ To install in a virtual environment in your current project:
     mkdir project-name && cd project-name
     python3 -m venv .env
     source .env/bin/activate
-    pip3 install adafruit-circuitpython-base64
+    pip3 install circuitpython-base64
 
 Usage Example
 =============
@@ -75,7 +75,7 @@ Contributing
 ============
 
 Contributions are welcome! Please read our `Code of Conduct
-<https://github.com/adafruit/Adafruit_CircuitPython_base64/blob/master/CODE_OF_CONDUCT.md>`_
+<https://github.com/jimbobbennett/CircuitPython_base64/blob/master/CODE_OF_CONDUCT.md>`_
 before contributing to help this project stay welcoming.
 
 Documentation

@@ -1,4 +1,4 @@
-import adafruit_base64 as base64
+import circuitpython_base64 as base64
 
 bytes_to_encode = b"Aladdin:open sesame"
 print(repr(bytes_to_encode))

@@ -1,6 +1,6 @@
 # The MIT License (MIT)
 #
-# Copyright (c) 2020 Jim Bennett for Adafruit
+# Copyright (c) 2020 Jim Bennett
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -20,7 +20,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 """
-`adafruit_base64`
+`circuitpython_base64`
 ================================================================================
 
 RFC 3548: Base16, Base32, Base64 Data Encodings
@@ -41,7 +41,7 @@ Implementation Notes
 # imports
 
 __version__ = "0.0.0-auto.0"
-__repo__ = "https://github.com/adafruit/Adafruit_CircuitPython_base64.git"
+__repo__ = "https://github.com/jimbobbennett/CircuitPython_base64.git"
 
 
 import re

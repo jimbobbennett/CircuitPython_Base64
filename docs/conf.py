@@ -38,7 +38,7 @@ source_suffix = ".rst"
 master_doc = "index"
 
 # General information about the project.
-project = "Adafruit base64 Library"
+project = "CircuitPython base64 Library"
 copyright = "2020 Jim Bennett"
 author = "Jim Bennett"
 
@@ -114,7 +114,7 @@ html_static_path = ["_static"]
 html_favicon = "_static/favicon.ico"
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = "AdafruitBase64Librarydoc"
+htmlhelp_basename = "CircuitPythonBase64Librarydoc"
 
 # -- Options for LaTeX output ---------------------------------------------
 
@@ -139,8 +139,8 @@ latex_elements = {
 latex_documents = [
     (
         master_doc,
-        "Adafruitbase64Library.tex",
-        "Adafruitbase64 Library Documentation",
+        "CircuitPythonBase64Library.tex",
+        "CircuitPythonbase64 Library Documentation",
         author,
         "manual",
     ),
@@ -153,8 +153,8 @@ latex_documents = [
 man_pages = [
     (
         master_doc,
-        "Adafruitbase64library",
-        "Adafruit base64 Library Documentation",
+        "CircuitPythonbase64library",
+        "CircuitPython base64 Library Documentation",
         [author],
         1,
     )
@@ -168,10 +168,10 @@ man_pages = [
 texinfo_documents = [
     (
         master_doc,
-        "Adafruitbase64Library",
-        "Adafruit base64 Library Documentation",
+        "CircuitPythonbase64Library",
+        "CircuitPython base64 Library Documentation",
         author,
-        "Adafruitbase64Library",
+        "CircuitPythonbase64Library",
         "One line description of project.",
         "Miscellaneous",
     ),

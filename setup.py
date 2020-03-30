@@ -18,17 +18,17 @@ with open(path.join(here, "README.rst"), encoding="utf-8") as f:
     long_description = f.read()
 
 setup(
-    name="adafruit-circuitpython-base64",
+    name="circuitpython-base64",
     use_scm_version=True,
     setup_requires=["setuptools_scm"],
     description="RFC 3548: Base16, Base32, Base64 Data Encodings",
     long_description=long_description,
     long_description_content_type="text/x-rst",
     # The project's main homepage.
-    url="https://github.com/adafruit/Adafruit_CircuitPython_base64",
+    url="https://github.com/jimbobbennett/CircuitPython_base64",
     # Author details
-    author="Adafruit Industries",
-    author_email="circuitpython@adafruit.com",
+    author="Jim Bennett",
+    author_email="jim.bennett@microsoft.com",
     install_requires=["Adafruit-Blinka", "adafruit-binascii"],
     # Choose your license
     license="MIT",
@@ -49,5 +49,5 @@ setup(
     # simple. Or you can use find_packages().
     # TODO: IF LIBRARY FILES ARE A PACKAGE FOLDER,
     #       CHANGE `py_modules=['...']` TO `packages=['...']`
-    py_modules=["adafruit_base64"],
+    py_modules=["circuitpython_base64"],
 )

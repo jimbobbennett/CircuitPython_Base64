@@ -12,3 +12,5 @@ bundles
 dist
 **/*.egg-info
 .vscode
+examples/adafruit_base64.py
+examples/adafruit_binascii.py
